@@ -420,6 +420,122 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
       ),
       body: Stack(
         children: [
+                // Carte Tadarruj+ : Halaqa, Objectifs illimités, Projection long terme & Parrainage Sadaqah
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0F291E), Color(0xFF173D2D)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: TadarrujColors.goldAccent.withValues(alpha: 0.6)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.workspace_premium_rounded, color: TadarrujColors.goldSoft, size: 26),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              isFr ? 'Tadarruj+ • Halaqa & Instituts' : 'Tadarruj+ • Halaqa & Institutes',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          if (isPremium)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: TadarrujColors.goldAccent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'ACTIF',
+                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 11),
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        isFr
+                            ? '• Accès complet aux Halaqas (élèves, enseignants & instituts)\n'
+                              '• Objectifs de mémorisation & révision illimités\n'
+                              '• Projection complète vers le but final (au-delà de 7 jours)\n'
+                              '• Contribution solidaire : chaque abonnement finance l’accès d’un étudiant (Sadaqah)'
+                            : '• Full access to Halaqas (students, teachers & institutes)\n'
+                              '• Unlimited memorization & revision goals\n'
+                              '• Full long-term trajectory (beyond 7 days)\n'
+                              '• Sadaqah fund: each subscription sponsors a student in need',
+                        style: const TextStyle(color: Color(0xFFE8EFEA), fontSize: 12.5, height: 1.45),
+                      ),
+                      const SizedBox(height: 14),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          FilledButton.icon(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: TadarrujColors.goldAccent,
+                              foregroundColor: Colors.black,
+                            ),
+                            onPressed: () async {
+                              await _client.auth.updateUser(UserAttributes(data: {'is_premium': !isPremium}));
+                              ref.read(isPremiumProvider.notifier).state = !isPremium;
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(!isPremium
+                                        ? (isFr ? '✨ Accès Tadarruj+ activé (Mode Test / Bêta) !' : '✨ Tadarruj+ activated (Beta mode)!')
+                                        : (isFr ? 'Retour en mode Gratuit.' : 'Switched back to Free plan.')),
+                                  ),
+                                );
+                              }
+                            },
+                            icon: Icon(isPremium ? Icons.check_circle_rounded : Icons.star_rounded, size: 18),
+                            label: Text(
+                              isPremium
+                                  ? (isFr ? 'Tadarruj+ Actif (Tester Gratuit)' : 'Tadarruj+ Active (Test Free)')
+                                  : (isFr ? 'Activer Tadarruj+ (Essai Bêta / 2,99€)' : 'Activate Tadarruj+ (Beta / €2.99)'),
+                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5),
+                            ),
+                          ),
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: TadarrujColors.goldSoft,
+                              side: const BorderSide(color: TadarrujColors.goldSoft),
+                            ),
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    isFr
+                                        ? '🤲 JazakAllahu Khayran ! L’option Parrainage Étudiant (Sadaqah) est prête pour les Stores.'
+                                        : '🤲 JazakAllahu Khayran! Student Sponsorship (Sadaqah) is ready for Stores.',
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.volunteer_activism_rounded, size: 18),
+                            label: Text(
+                              isFr ? 'Parrainer un étudiant (Sadaqah)' : 'Sponsor a student (Sadaqah)',
+                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
           const IslamicPatternOverlay(opacity: 0.04),
           if (_loading)
             const Center(child: CircularProgressIndicator())

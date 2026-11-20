@@ -1,3 +1,4 @@
+import '../../app/premium_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -201,6 +202,39 @@ class GoalsScreen extends ConsumerWidget {
     }
   }
 
+  void _handleCreateGoal(BuildContext context, WidgetRef ref, List activeGoals) {
+    final isPremium = ref.read(isPremiumProvider);
+    if (!isPremium && activeGoals.isNotEmpty) {
+      final isFr = Localizations.localeOf(context).languageCode != 'en';
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(isFr ? 'Objectifs multiples • Tadarruj+' : 'Multiple goals • Tadarruj+'),
+          content: Text(
+            isFr
+                ? 'La version gratuite permet de suivre 1 objectif actif à la fois. Passez à Tadarruj+ pour gérer plusieurs objectifs en parallèle, accéder aux Halaqas et parrainer un étudiant.'
+                : 'The free version supports 1 active goal at a time. Upgrade to Tadarruj+ for unlimited parallel goals, Halaqas, and student sponsorship.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(isFr ? 'Plus tard' : 'Later'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                context.push('/settings/premium');
+              },
+              child: Text(isFr ? 'Découvrir Tadarruj+' : 'Explore Tadarruj+'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+    context.push('/goals/new');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -220,7 +254,7 @@ class GoalsScreen extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
-              onPressed: () => context.push('/goals/new'),
+              onPressed: () => _handleCreateGoal(context, ref, goalsAsync.valueOrNull ?? []),
               icon: const Icon(Icons.add_rounded, size: 18),
               label: Text(
                 Localizations.localeOf(context).languageCode == 'ar' ? 'هدف جديد' : (isFr ? 'Nouvel objectif' : 'New goal'),
@@ -239,7 +273,7 @@ class GoalsScreen extends ConsumerWidget {
           Localizations.localeOf(context).languageCode == 'ar' ? 'هدف جديد' : (isFr ? 'Nouvel objectif' : 'New goal'),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        onPressed: () => context.push('/goals/new'),
+        onPressed: () => _handleCreateGoal(context, ref, goalsAsync.valueOrNull ?? []),
       ),
       body: Stack(
         children: [
@@ -338,7 +372,7 @@ class GoalsScreen extends ConsumerWidget {
                               ),
                               const SizedBox(height: 16),
                               FilledButton.icon(
-                                onPressed: () => context.push('/goals/new'),
+                                onPressed: () => _handleCreateGoal(context, ref, goalsAsync.valueOrNull ?? []),
                                 icon: const Icon(Icons.add_rounded),
                                 label: Text(
                                   isFr

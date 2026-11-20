@@ -1,3 +1,4 @@
+import '../../app/premium_provider.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -1127,7 +1128,31 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
               ],
             ),
             const Divider(height: 22),
-            ...milestones.asMap().entries.map((entry) {
+            if (!ref.watch(isPremiumProvider))
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: TadarrujColors.goldAccent.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: TadarrujColors.goldAccent.withValues(alpha: 0.45)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.lock_clock_rounded, size: 18, color: TadarrujColors.goldAccent),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        isFr
+                            ? 'Version gratuite : projection sur 7 jours. Débloquez l’horizon complet & les Halaqas avec Tadarruj+.'
+                            : 'Free plan: 7-day projection. Unlock full trajectory & Halaqas with Tadarruj+.',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ...(ref.watch(isPremiumProvider) ? milestones : milestones.take(1)).toList().asMap().entries.map((entry) {
               final idx = entry.key;
               final m = entry.value as Map;
               final bool isFinal = m['isFinal'] as bool;
