@@ -75,7 +75,7 @@ class TadarrujAppBar extends ConsumerWidget implements PreferredSizeWidget {
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            onPressed: () => GoRouter.of(context).push('/settings/premium'),
+            onPressed: () => GoRouter.of(context).push('/premium'),
             icon: const Icon(Icons.workspace_premium_rounded, size: 17, color: TadarrujColors.goldSoft),
             label: const Text(
               'Tadarruj+',

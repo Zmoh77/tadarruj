@@ -223,7 +223,7 @@ class GoalsScreen extends ConsumerWidget {
             FilledButton(
               onPressed: () {
                 Navigator.pop(ctx);
-                context.push('/settings/premium');
+                context.push('/premium');
               },
               child: Text(isFr ? 'Découvrir Tadarruj+' : 'Explore Tadarruj+'),
             ),

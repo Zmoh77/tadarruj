@@ -117236,7 +117236,7 @@ n.push(A.eg(s,s,A.e7(q?B.vT:B.vR,B.a9,s,20),s,s,new A.aCl(b,q),s,s,s,s))
 n.push(B.r_)
 return A.Dr(n,s,s,o,16)}}
 A.aCi.prototype={
-$0(){return A.o0(this.a).i2("/settings/premium",t.X)},
+$0(){return A.o0(this.a).i2("/premium",t.X)},
 $S:0}
 A.aCj.prototype={
 $0(){return A.o0(this.a).i2("/settings",t.X)},
@@ -118638,7 +118638,7 @@ return null},
 $S:0}
 A.ang.prototype={
 $0(){A.cj(this.a,!1).eP(null)
-A.b0d(this.b,"/settings/premium",t.X)},
+A.b0d(this.b,"/premium",t.X)},
 $S:0}
 A.anA.prototype={
 $0(){var s=this,r=A.fP(s.d)
@@ -122074,10 +122074,10 @@ m=A.Dr(a7,a7,B.j,A.aO(A.b([B.N_,B.bO,new A.hf(1,B.cw,A.o(a8.gKf(),a7,a7,a7,a7,a7
 h=A.bp(18)
 g=A.ee(B.R.bH(0.6),1)
 if(i)f="\u0627\u0644\u062a\u0631\u0642\u064a\u0629 \u0625\u0644\u0649 \u062a\u062f\u0631\u0651\u062c \u0628\u0644\u0633"
-else f=j?"Passer \xe0 TADARRUJ Premium":"Upgrade to TADARRUJ Pro"
+else f=j?"Tadarruj+ \u2022 Halaqa & Instituts":"Upgrade to TADARRUJ Pro"
 f=A.o(f,a7,a7,a7,a7,B.anL,a7,a7,a7)
 if(i)e="\u0623\u0647\u062f\u0627\u0641 \u063a\u064a\u0631 \u0645\u062d\u062f\u0648\u062f\u0629\u060c \u0645\u062a\u0627\u0628\u0639\u0629 60 \u062d\u0632\u0628\u0627\u064b \u0648\u0645\u0631\u0627\u062c\u0639\u0629 \u0630\u0643\u064a\u0629"
-else e=j?"Objectifs illimit\xe9s, suivi 60 Hizb & r\xe9visions avanc\xe9es":"Unlimited goals, 60-Hizb tracking & smart reviews"
+else e=j?"Acc\xe8s Halaqas, objectifs illimit\xe9s, projection long terme & parrainage Sadaqah":"Unlimited goals, 60-Hizb tracking & smart reviews"
 h=A.bx(a7,A.qw(!1,B.v4,a7,a7,!0,a7,a7,a7,!0,a7,B.akR,a7,a7,a7,a7,new A.aTt(a9),!1,a7,a7,a7,a7,A.o(e,a7,a7,a7,a7,B.amD,a7,a7,a7),a7,f,B.Z3,a7),B.q,a7,a7,new A.b9(a7,a7,g,h,a7,B.wm,B.G),a7,a7,a7,a7,a7,a7,a7)
 a8=a8.gKe()
 g=s.ok.w

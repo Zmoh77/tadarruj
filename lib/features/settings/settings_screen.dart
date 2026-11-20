@@ -111,14 +111,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               leading: const TadarrujLogo(size: 42, showTitle: false),
               title: Text(
-                isAr ? 'الترقية إلى تدرّج بلس' : (isFr ? 'Passer à TADARRUJ Premium' : 'Upgrade to TADARRUJ Pro'),
+                isAr ? 'الترقية إلى تدرّج بلس' : (isFr ? 'Tadarruj+ • Halaqa & Instituts' : 'Upgrade to TADARRUJ Pro'),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               subtitle: Text(
-                isAr ? 'أهداف غير محدودة، متابعة 60 حزباً ومراجعة ذكية' : (isFr ? 'Objectifs illimités, suivi 60 Hizb & révisions avancées' : 'Unlimited goals, 60-Hizb tracking & smart reviews'),
+                isAr ? 'أهداف غير محدودة، متابعة 60 حزباً ومراجعة ذكية' : (isFr ? 'Accès Halaqas, objectifs illimités, projection long terme & parrainage Sadaqah' : 'Unlimited goals, 60-Hizb tracking & smart reviews'),
                 style: const TextStyle(
                   color: TadarrujColors.goldSoft,
                   fontSize: 12.5,
