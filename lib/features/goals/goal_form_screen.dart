@@ -61,10 +61,12 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
     double totalHizb,
     String hizbRangeText,
     String autoTitle,
+    bool isReverse,
   }) _computeCalculation(bool isFr) {
     double sPos = 0.0;
     double ePos = 10.0;
     String autoTitle = '';
+    bool isReverse = false;
 
     if (_scopeType == GoalScopeType.surahVerse) {
       final s1 = QuranMetadata.getSurahByNumber(_startSurah);
@@ -72,17 +74,32 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
       final v1 = _startVerse.clamp(1, s1.verseCount);
       final v2 = _endVerse.clamp(1, s2.verseCount);
 
-      sPos = QuranMetadata.getPositionForSurahVerse(
-        surahNumber: s1.number,
-        verseNumber: v1,
-        isEnd: false,
-      );
-      ePos = QuranMetadata.getPositionForSurahVerse(
-        surahNumber: s2.number,
-        verseNumber: v2,
-        isEnd: true,
-      );
-      if (ePos <= sPos) ePos = (sPos + 0.5).clamp(0.1, 604.0);
+      isReverse = (_startSurah > _endSurah) || (_startSurah == _endSurah && v1 > v2);
+      if (!isReverse) {
+        sPos = QuranMetadata.getPositionForSurahVerse(
+          surahNumber: s1.number,
+          verseNumber: v1,
+          isEnd: false,
+        );
+        ePos = QuranMetadata.getPositionForSurahVerse(
+          surahNumber: s2.number,
+          verseNumber: v2,
+          isEnd: true,
+        );
+        if (ePos <= sPos) ePos = (sPos + 0.5).clamp(0.1, 604.0);
+      } else {
+        sPos = QuranMetadata.getPositionForSurahVerse(
+          surahNumber: s1.number,
+          verseNumber: v1,
+          isEnd: true,
+        );
+        ePos = QuranMetadata.getPositionForSurahVerse(
+          surahNumber: s2.number,
+          verseNumber: v2,
+          isEnd: false,
+        );
+        if (sPos <= ePos) ePos = (sPos - 0.5).clamp(0.0, 603.5);
+      }
 
       autoTitle = s1.number == s2.number
           ? '${s1.nameTranslit} ($v1 → $v2)'
@@ -90,28 +107,42 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
     } else if (_scopeType == GoalScopeType.hizb) {
       final h1 = HizbDivisions.all[(_startHizb - 1).clamp(0, 59)];
       final h2 = HizbDivisions.all[(_endHizb - 1).clamp(0, 59)];
-      sPos = (h1.startPage - 1).toDouble();
-      ePos = h2.endPage.toDouble();
-      if (ePos <= sPos) ePos = (sPos + 10.0).clamp(1.0, 604.0);
+      isReverse = _startHizb > _endHizb;
+      if (!isReverse) {
+        sPos = (h1.startPage - 1).toDouble();
+        ePos = h2.endPage.toDouble();
+        if (ePos <= sPos) ePos = (sPos + 10.0).clamp(1.0, 604.0);
+      } else {
+        sPos = h1.endPage.toDouble();
+        ePos = (h2.startPage - 1).toDouble();
+      }
       autoTitle = h1.number == h2.number
           ? 'Hizb ${h1.number} (${h1.rangeLabel})'
-          : 'Hizb ${h1.number} à ${h2.number}';
+          : 'Hizb ${h1.number} → ${h2.number}';
     } else {
-      sPos = (_startPage - 1).clamp(0, 603).toDouble();
-      ePos = _endPage.clamp(_startPage, 604).toDouble();
+      isReverse = _startPage > _endPage;
+      if (!isReverse) {
+        sPos = (_startPage - 1).clamp(0, 603).toDouble();
+        ePos = _endPage.clamp(1, 604).toDouble();
+      } else {
+        sPos = _startPage.clamp(1, 604).toDouble();
+        ePos = (_endPage - 1).clamp(0, 603).toDouble();
+      }
       autoTitle = isFr
-          ? 'Pages $_startPage à $_endPage'
-          : 'Pages $_startPage to $_endPage';
+          ? 'Pages $_startPage → $_endPage'
+          : 'Pages $_startPage → $_endPage';
     }
 
-    final double totalPages = (ePos - sPos).clamp(0.1, 604.0);
+    final double totalPages = (ePos - sPos).abs().clamp(0.1, 604.0);
     final int totalLines = (totalPages * 15).round().clamp(1, 9060);
     final double totalHizb = totalPages / 10.06;
 
-    final int pStart = (sPos.floor() + 1).clamp(1, 604);
-    final int pEnd = ePos.ceil().clamp(1, 604);
-    final hStart = HizbDivisions.getForPage(pStart).number;
-    final hEnd = HizbDivisions.getForPage(pEnd).number;
+    final double lowPos = sPos < ePos ? sPos : ePos;
+    final double highPos = sPos < ePos ? ePos : sPos;
+    final int pLow = (lowPos.floor() + 1).clamp(1, 604);
+    final int pHigh = highPos.ceil().clamp(1, 604);
+    final hStart = HizbDivisions.getForPage(isReverse ? pHigh : pLow).number;
+    final hEnd = HizbDivisions.getForPage(isReverse ? pLow : pHigh).number;
     final hizbRangeText = hStart == hEnd ? 'Hizb $hStart' : 'Hizb $hStart → $hEnd';
 
     return (
@@ -122,6 +153,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
       totalHizb: totalHizb,
       hizbRangeText: hizbRangeText,
       autoTitle: autoTitle,
+      isReverse: isReverse,
     );
   }
 
@@ -361,6 +393,11 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                             label:
                                 '${calc.totalHizb.toStringAsFixed(2)} hizb (${calc.hizbRangeText})',
                           ),
+                          _CalcChip(
+                            label: calc.isReverse
+                                ? (isFr ? 'Sens inversé (Fin → Début)' : 'Reverse order (End → Start)')
+                                : (isFr ? 'Sens croissant (Début → Fin)' : 'Forward order (Start → End)'),
+                          ),
                         ],
                       ),
                       const Divider(color: Colors.white24, height: 20),
@@ -513,11 +550,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                       setState(() {
                         _startSurah = val;
                         _startVerse = 1;
-                        if (_endSurah < _startSurah) {
-                          _endSurah = _startSurah;
-                          _endVerse = QuranMetadata.getSurahByNumber(_endSurah)
-                              .verseCount;
-                        }
+
                       });
                     },
                   ),
@@ -542,9 +575,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                       if (val != null) {
                         setState(() {
                           _startVerse = val;
-                          if (_endSurah == _startSurah && _endVerse < val) {
-                            _endVerse = val;
-                          }
+
                         });
                       }
                     },
@@ -574,7 +605,6 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                       border: const OutlineInputBorder(),
                     ),
                     items: QuranMetadata.surahs
-                        .where((s) => s.number >= _startSurah)
                         .map((s) {
                       return DropdownMenuItem<int>(
                         value: s.number,
@@ -605,8 +635,6 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                       border: const OutlineInputBorder(),
                     ),
                     items: List.generate(sEnd.verseCount, (i) => i + 1)
-                        .where((v) =>
-                            _endSurah > _startSurah || v >= _startVerse)
                         .map((v) => DropdownMenuItem<int>(
                               value: v,
                               child: Text('Verset $v'),
@@ -651,7 +679,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                 if (val != null) {
                   setState(() {
                     _startHizb = val;
-                    if (_endHizb < val) _endHizb = val;
+                    
                   });
                 }
               },
@@ -665,8 +693,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                 border: const OutlineInputBorder(),
               ),
               items: HizbDivisions.all
-                  .where((h) => h.number >= _startHizb)
-                  .map((h) {
+                      .map((h) {
                 return DropdownMenuItem<int>(
                   value: h.number,
                   child: Text(
@@ -708,7 +735,7 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                   if (val != null) {
                     setState(() {
                       _startPage = val;
-                      if (_endPage < val) _endPage = val;
+                      
                     });
                   }
                 },
@@ -723,7 +750,6 @@ class _GoalFormScreenState extends ConsumerState<GoalFormScreen> {
                   border: const OutlineInputBorder(),
                 ),
                 items: List.generate(604, (i) => i + 1)
-                    .where((p) => p >= _startPage)
                     .map((p) => DropdownMenuItem<int>(
                           value: p,
                           child: Text('Page $p'),

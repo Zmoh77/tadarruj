@@ -28,7 +28,7 @@ class TodayTaskModel {
   bool get isDone => status == 'done';
 
   int get estimatedLines =>
-      (((posTo - posFrom).clamp(0.1, 604.0)) * 15).round().clamp(1, 9060);
+      (((posTo - posFrom).abs().clamp(0.1, 604.0)) * 15).round().clamp(1, 9060);
 
   bool get supportsSpacedReview =>
       activity == 'memorisation' || activity == 'revision';
@@ -46,8 +46,8 @@ class TodayTaskModel {
       goalId: (map['goal_id'] as String?) ?? '',
       goalTitle: goalTitle,
       activity: (map['activity'] as String?) ?? 'lecture',
-      startPage: (posFrom.floor() + 1).clamp(1, 604),
-      endPage: posTo.ceil().clamp(1, 604),
+      startPage: ((posFrom < posTo ? posFrom : posTo).floor() + 1).clamp(1, 604),
+      endPage: (posFrom < posTo ? posTo : posFrom).ceil().clamp(1, 604),
       posFrom: posFrom,
       posTo: posTo,
       status: (map['status'] as String?) ?? 'planned',
@@ -96,7 +96,7 @@ class TodayRepository {
   }
 
   Future<int?> completeTask(TodayTaskModel task, {bool? isFluent}) async {
-    final quantity = (task.posTo - task.posFrom).clamp(0.1, 604.0);
+    final quantity = (task.posTo - task.posFrom).abs().clamp(0.1, 604.0);
 
     await _client.from('tasks').update({
       'status': 'done',

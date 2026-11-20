@@ -37,8 +37,12 @@ class GoalModel {
       id: map['id'] as String,
       title: (map['title'] as String?) ?? '',
       goalType: (map['activity'] as String?) ?? 'lecture',
-      startPage: (startPos.floor() + 1).clamp(1, 604),
-      endPage: endPos.ceil().clamp(1, 604),
+      startPage: startPos <= endPos
+          ? (startPos.floor() + 1).clamp(1, 604)
+          : startPos.ceil().clamp(1, 604),
+      endPage: startPos <= endPos
+          ? endPos.ceil().clamp(1, 604)
+          : (endPos.floor() + 1).clamp(1, 604),
       durationDays: computedDays,
       status: (map['status'] as String?) ?? 'active',
       createdAt: DateTime.tryParse(map['created_at']?.toString() ?? '') ??
@@ -70,6 +74,7 @@ class GoalsRepository {
 
   String _mapActivityToDb(String uiType) {
     switch (uiType) {
+      case 'memorisation':
       case 'memorization':
         return 'memorisation';
       case 'revision':
@@ -110,7 +115,8 @@ class GoalsRepository {
 
     final double resolvedStartPos = startPos ?? ((startPage ?? 1) - 1).toDouble();
     final double resolvedEndPos = endPos ?? (endPage ?? 1).toDouble();
-    final double totalPages = (resolvedEndPos - resolvedStartPos).clamp(0.1, 604.0);
+    final bool isReverse = resolvedEndPos < resolvedStartPos;
+    final double totalPages = (resolvedEndPos - resolvedStartPos).abs().clamp(0.1, 604.0);
     final String dbActivity = _mapActivityToDb(goalType ?? activity ?? 'memorisation');
 
     final insertedGoal = await _client
@@ -152,10 +158,13 @@ class GoalsRepository {
     final tasksToInsert = [];
 
     for (int i = 0; i < studyDates.length; i++) {
-      if (currentPos >= resolvedEndPos) break;
+      if (!isReverse && currentPos >= resolvedEndPos) break;
+      if (isReverse && currentPos <= resolvedEndPos) break;
       final double nextPos = (i == studyDates.length - 1)
           ? resolvedEndPos
-          : (currentPos + pagesPerSession).clamp(resolvedStartPos, resolvedEndPos);
+          : (!isReverse
+              ? (currentPos + pagesPerSession).clamp(resolvedStartPos, resolvedEndPos)
+              : (currentPos - pagesPerSession).clamp(resolvedEndPos, resolvedStartPos));
 
       tasksToInsert.add({
         'user_id': userId,
