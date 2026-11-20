@@ -635,7 +635,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                                 double juzPctRatio = 0.0;
                                 if (isConcerned && donePagesExact > 0) {
                                   final double segLow = isReverseGoal ? currentVirtualPage : startPage.toDouble();
-                                  final double segHigh = isReverseGoal ? (endPage + 1).toDouble() : (startPage + donePagesExact);
+                                  final double segHigh = isReverseGoal ? endPage.toDouble() : (startPage + donePagesExact);
                                   final double overlapStart = segLow > juzStartPage ? segLow : juzStartPage.toDouble();
                                   final double overlapEnd = segHigh < (juzEndPage + 1) ? segHigh : (juzEndPage + 1).toDouble();
                                   final double doneInJuz = (overlapEnd - overlapStart).clamp(0.0, juzSpanPages);
@@ -798,7 +798,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                                   double doneInHizb = 0.0;
                                   if (donePagesExact > 0) {
                                     final double segLow = isReverseGoal ? currentVirtualPage : startPage.toDouble();
-                                    final double segHigh = isReverseGoal ? (endPage + 1).toDouble() : (startPage + donePagesExact);
+                                    final double segHigh = isReverseGoal ? endPage.toDouble() : (startPage + donePagesExact);
                                     final double overlapStart = segLow > hInfo.startPage ? segLow : hInfo.startPage.toDouble();
                                     final double overlapEnd = segHigh < (hInfo.endPage + 1) ? segHigh : (hInfo.endPage + 1).toDouble();
                                     doneInHizb = (overlapEnd - overlapStart).clamp(0.0, fullHizbPages);

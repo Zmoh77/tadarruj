@@ -119932,30 +119932,30 @@ A.aPw.prototype={
 $1(a5){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c=this,b=null,a=a5+1,a0=a5*20+1,a1=a===30?604:a*20,a2=a1-a0+1,a3=c.b,a4=a3>=a0&&c.c<=a1
 if(a4&&c.d>0){s=c.a.a
 r=s?c.e:c.c
-q=s?a3+1:c.c+c.d
-p=r>a0?r:a0
-o=a1+1
-n=B.e.az(B.e.az((q<o?q:o)-p,0,a2)/a2,0,1)}else n=0
-m=B.e.b1(n*100)
-l=B.bD.bj(0.28)
-a3=m>=100
-if(a3){k=B.bB.bj(0.24)
-l=B.bB}else if(a4){k=B.O.bj(0.22)
-l=B.O}else k=B.J
-s=""+a
-j=""+m
+a3=s?a3:c.c+c.d
+q=r>a0?r:a0
+p=a1+1
+o=B.e.az(B.e.az((a3<p?a3:p)-q,0,a2)/a2,0,1)}else o=0
+n=B.e.b1(o*100)
+m=B.bD.bj(0.28)
+s=n>=100
+if(s){l=B.bB.bj(0.24)
+m=B.bB}else if(a4){l=B.O.bj(0.22)
+m=B.O}else l=B.J
+k=""+a
+j=""+n
 i=A.bi(9)
-h=A.dV(l,a4?1.4:0.8)
+h=A.dV(m,a4?1.4:0.8)
 g=c.f
-f=A.o(A.bW(g).gbc()==="ar"?"\u062c"+A.CF(a):"J"+s,b,b,b,b,B.am4,b,b,b)
-if(a4)g=A.bW(g).gbc()==="ar"?A.CF(m)+"\u066a":j+"%"
+f=A.o(A.bW(g).gbc()==="ar"?"\u062c"+A.CF(a):"J"+k,b,b,b,b,B.am4,b,b,b)
+if(a4)g=A.bW(g).gbc()==="ar"?A.CF(n)+"\u066a":j+"%"
 else g="\u2014"
-if(a3)e=B.bB
+if(s)e=B.bB
 else e=a4?B.O:B.bD
 e=A.o(g,b,b,b,b,A.aE(b,b,e,b,b,b,b,b,b,b,b,10.5,b,b,B.R,b,b,!0,b,b,b,b,b,b,b,b),b,b,b)
 g=A.bi(3)
 d=B.bD.bj(0.2)
-return A.b1m(A.bq(b,A.aJ(A.b([f,B.cW,e,B.akf,A.xT(g,A.b0x(d,a3?B.bB:B.O,3.5,n),B.bW)],t.p),B.o,B.i,B.j,0,B.r),B.p,b,b,new A.b2(k,b,h,i,b,b,B.E),b,b,b,B.Vp,b,b,58),"Juz "+s+" (Pages "+a0+"\u2013"+a1+") \u2022 "+j+"%")},
+return A.b1m(A.bq(b,A.aJ(A.b([f,B.cW,e,B.akf,A.xT(g,A.b0x(d,s?B.bB:B.O,3.5,o),B.bW)],t.p),B.o,B.i,B.j,0,B.r),B.p,b,b,new A.b2(l,b,h,i,b,b,B.E),b,b,b,B.Vp,b,b,58),"Juz "+k+" (Pages "+a0+"\u2013"+a1+") \u2022 "+j+"%")},
 $S:799}
 A.aPx.prototype={
 $1(a){var s,r=null,q=this.a,p=a.e,o=q>=p,n=!o&&q>=a.d,m=B.bD.bj(0.14)
@@ -119971,7 +119971,7 @@ A.aPy.prototype={
 $1(a3){var s,r,q,p,o,n,m,l,k,j,i,h,g,f=this,e=null,d=f.a,c=d.a?f.b-a3:f.c+a3,b=B.fc[c-1],a=b.x,a0=b.w,a1=B.f.az(a-a0+1,1,15),a2=f.d
 if(a2>0){d=d.a
 s=d?f.e:f.f
-r=d?f.r+1:f.f+a2
+r=d?f.r:f.f+a2
 if(s>a0)a0=s
 q=a+1
 p=B.e.az((r<q?r:q)-a0,0,a1)}else p=0
