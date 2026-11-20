@@ -416,7 +416,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
 
     return Scaffold(
       appBar: TadarrujAppBar(
-        title: isFr ? 'Halaqa • Enseignant & Élève' : 'Halaqa • Teacher & Student',
+        title: 'Tadarruj+',
       ),
       body: Stack(
         children: [
@@ -429,7 +429,15 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 48),
                 children: [
-                  Container(
+                  Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 820),
+                      child: _buildPlansAndSadaqahSection(context, isFr, isSubscribed: isPremium),
+                    ),
+                  ),
+                  if (isPremium) ...[
+                    const SizedBox(height: 24),
+                    Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(22),
@@ -740,6 +748,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
                       ),
                     ),
                   ),
+                  ],
                 ],
               ),
             ),
@@ -1220,8 +1229,6 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
                 ),
               );
             }),
-          const SizedBox(height: 24),
-          _buildPlansAndSadaqahSection(context, isFr, isSubscribed: true),
         ],
       ),
     );
@@ -1328,7 +1335,34 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
                 ],
               ),
               const SizedBox(height: 18),
-              if (!isSubscribed)
+              if (isSubscribed)
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: TadarrujColors.goldAccent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        isFr ? '✓ Abonnement Tadarruj+ actif' : '✓ Tadarruj+ active',
+                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 12),
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () async {
+                        await _client.auth.updateUser(UserAttributes(data: {'is_premium': false}));
+                        ref.read(isPremiumProvider.notifier).state = false;
+                      },
+                      child: Text(
+                        isFr ? 'Tester vue Gratuite (masquer Halaqa)' : 'Test Free view (hide Halaqa)',
+                        style: const TextStyle(color: TadarrujColors.goldSoft, fontSize: 12),
+                      ),
+                    ),
+                  ],
+                )
+              else
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton.icon(

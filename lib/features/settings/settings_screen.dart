@@ -9,7 +9,6 @@ import '../../app/locale_provider.dart';
 import '../../core/supabase_client.dart';
 import '../../core/tadarruj_brand.dart';
 import '../../l10n/app_localizations.dart';
-import 'premium_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -91,53 +90,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 36),
         children: [
           // Bannière Tadarruj+
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              gradient: const LinearGradient(
-                colors: [
-                  TadarrujColors.emeraldDeep,
-                  TadarrujColors.emeraldPrimary,
-                ],
-              ),
-              border: Border.all(
-                color: TadarrujColors.goldAccent.withValues(alpha: 0.6),
-              ),
-            ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              leading: const TadarrujLogo(size: 42, showTitle: false),
-              title: Text(
-                isAr ? 'الترقية إلى تدرّج بلس' : (isFr ? 'Tadarruj+ • Halaqa & Instituts' : 'Upgrade to TADARRUJ Pro'),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                isAr ? 'أهداف غير محدودة، متابعة 60 حزباً ومراجعة ذكية' : (isFr ? 'Accès Halaqas, objectifs illimités, projection long terme & parrainage Sadaqah' : 'Unlimited goals, 60-Hizb tracking & smart reviews'),
-                style: const TextStyle(
-                  color: TadarrujColors.goldSoft,
-                  fontSize: 12.5,
-                ),
-              ),
-              trailing: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: TadarrujColors.goldSoft,
-                size: 16,
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PremiumScreen()),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-
           // Compte
           Text(
             l10n.settingsAccountSection,
