@@ -90,7 +90,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 36),
         children: [
-          // Bannière TADARRUJ Premium
+          // Bannière Tadarruj+
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
