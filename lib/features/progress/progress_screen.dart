@@ -227,6 +227,18 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
               final bool dailyTargetReached =
                   smartDailyLines == 0 || todayDoneLines >= smartDailyLines;
 
+              bool isReverseGoal = false;
+              if (activeGoal != null && activeGoal.title.contains('→')) {
+                final parts = activeGoal.title.split('→');
+                if (parts.length == 2) {
+                  final leftNums = RegExp(r'\d+').allMatches(parts[0]).map((m) => int.parse(m.group(0)!)).toList();
+                  final rightNums = RegExp(r'\d+').allMatches(parts[1]).map((m) => int.parse(m.group(0)!)).toList();
+                  if (leftNums.isNotEmpty && rightNums.isNotEmpty && leftNums.first > rightNums.first) {
+                    isReverseGoal = true;
+                  }
+                }
+              }
+
               final int startHizb = HizbDivisions.getForPage(startPage).number;
               final int endHizb = HizbDivisions.getForPage(endPage).number;
               final int hizbSpan = (endHizb - startHizb + 1).clamp(1, 60);
@@ -238,9 +250,14 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                   coveredSurahs.add(s);
                 }
               }
+              if (isReverseGoal) {
+                coveredSurahs.sort((a, b) => b.number.compareTo(a.number));
+              }
 
-              final double currentVirtualPage =
-                  startPage + (doneLines / 15.0);
+              final double donePagesExact = doneLines / 15.0;
+              final double currentVirtualPage = isReverseGoal
+                  ? (endPage - donePagesExact).clamp(startPage.toDouble(), endPage.toDouble())
+                  : (startPage + donePagesExact).clamp(startPage.toDouble(), endPage.toDouble());
 
               // Calcul du bilan hebdomadaire (7 derniers jours)
               final DateTime sevenDaysAgo = DateTime(now.year, now.month, now.day)
@@ -548,6 +565,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                     _buildTrajectoryCard(
                       context: context,
                       isFr: isFr,
+                      isReverse: isReverseGoal,
                       now: now,
                       startPage: startPage,
                       endPage: endPage,
@@ -615,11 +633,12 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                                     endPage >= juzStartPage && startPage <= juzEndPage;
 
                                 double juzPctRatio = 0.0;
-                                if (isConcerned) {
-                                  final double clampedStart =
-                                      startPage > juzStartPage ? startPage.toDouble() : juzStartPage.toDouble();
-                                  final double doneInJuz =
-                                      (currentVirtualPage - clampedStart).clamp(0.0, juzSpanPages);
+                                if (isConcerned && donePagesExact > 0) {
+                                  final double segLow = isReverseGoal ? currentVirtualPage : startPage.toDouble();
+                                  final double segHigh = isReverseGoal ? (endPage + 1).toDouble() : (startPage + donePagesExact);
+                                  final double overlapStart = segLow > juzStartPage ? segLow : juzStartPage.toDouble();
+                                  final double overlapEnd = segHigh < (juzEndPage + 1) ? segHigh : (juzEndPage + 1).toDouble();
+                                  final double doneInJuz = (overlapEnd - overlapStart).clamp(0.0, juzSpanPages);
                                   juzPctRatio = (doneInJuz / juzSpanPages).clamp(0.0, 1.0);
                                 }
                                 final int juzPct = (juzPctRatio * 100).round();
@@ -712,7 +731,11 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                                         ? (isFr
                                             ? 'Sourates de l’objectif (${coveredSurahs.length} sourate(s) • Pages $startPage–$endPage)'
                                             : 'Goal Surahs (${coveredSurahs.length} surah(s))')
-                                        : (Localizations.localeOf(context).languageCode == 'ar' ? 'أحزاب الهدف (حزب $startHizb ← $endHizb)' : (isFr ? 'Hizb de l’objectif (Hizb $startHizb → $endHizb)' : 'Goal Hizb (Hizb $startHizb → $endHizb)')),
+                                        : (Localizations.localeOf(context).languageCode == 'ar'
+                                            ? 'أحزاب الهدف (حزب ${isReverseGoal ? endHizb : startHizb} ← ${isReverseGoal ? startHizb : endHizb})'
+                                            : (isFr
+                                                ? 'Hizb de l’objectif (Hizb ${isReverseGoal ? endHizb : startHizb} → ${isReverseGoal ? startHizb : endHizb})'
+                                                : 'Goal Hizb (Hizb ${isReverseGoal ? endHizb : startHizb} → ${isReverseGoal ? startHizb : endHizb})')),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 15,
@@ -769,18 +792,18 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: List.generate(hizbSpan, (idx) {
-                                  final hNum = startHizb + idx;
+                                  final hNum = isReverseGoal ? (endHizb - idx) : (startHizb + idx);
                                   final hInfo = HizbDivisions.all[hNum - 1];
-                                  final double effStart = startPage > hInfo.startPage
-                                      ? startPage.toDouble()
-                                      : hInfo.startPage.toDouble();
-                                  final double effEnd = endPage < hInfo.endPage
-                                      ? endPage.toDouble()
-                                      : hInfo.endPage.toDouble();
-                                  final double span = (effEnd - effStart + 1).clamp(1.0, 15.0);
-                                  final double doneInHizb =
-                                      (currentVirtualPage - effStart).clamp(0.0, span);
-                                  final double hRatio = (doneInHizb / span).clamp(0.0, 1.0);
+                                  final double fullHizbPages = (hInfo.endPage - hInfo.startPage + 1).toDouble().clamp(1.0, 15.0);
+                                  double doneInHizb = 0.0;
+                                  if (donePagesExact > 0) {
+                                    final double segLow = isReverseGoal ? currentVirtualPage : startPage.toDouble();
+                                    final double segHigh = isReverseGoal ? (endPage + 1).toDouble() : (startPage + donePagesExact);
+                                    final double overlapStart = segLow > hInfo.startPage ? segLow : hInfo.startPage.toDouble();
+                                    final double overlapEnd = segHigh < (hInfo.endPage + 1) ? segHigh : (hInfo.endPage + 1).toDouble();
+                                    doneInHizb = (overlapEnd - overlapStart).clamp(0.0, fullHizbPages);
+                                  }
+                                  final double hRatio = (doneInHizb / fullHizbPages).clamp(0.0, 1.0);
                                   final int hPct = (hRatio * 100).round();
 
                                   final bool isDone = hPct >= 100;
@@ -993,6 +1016,7 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
   Widget _buildTrajectoryCard({
     required BuildContext context,
     required bool isFr,
+    bool isReverse = false,
     required DateTime now,
     required int startPage,
     required int endPage,
@@ -1040,8 +1064,9 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
         final int projectedLines =
             (doneLines + (d * dailyPace)).clamp(0, totalLines);
         final int projectedPct = ((projectedLines / totalLines) * 100).round();
-        final int projectedPage = (startPage + (projectedLines / 15.0))
-            .floor()
+        final int projectedPage = (isReverse
+                ? (endPage - (projectedLines / 15.0)).ceil()
+                : (startPage + (projectedLines / 15.0)).floor())
             .clamp(startPage, endPage);
         final surahAtPage = QuranMetadata.getSurahForPage(projectedPage);
         final DateTime realDate = addStudyDays(now, d);
@@ -1059,7 +1084,8 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
     final int daysToFinish =
         remainingLines == 0 ? 0 : (remainingLines / dailyPace).ceil();
     final DateTime finishDate = addStudyDays(now, daysToFinish);
-    final endSurah = QuranMetadata.getSurahForPage(endPage);
+    final int finalTargetPage = isReverse ? startPage : endPage;
+    final endSurah = QuranMetadata.getSurahForPage(finalTargetPage);
 
     milestones.add({
       'title': remainingLines == 0
@@ -1068,8 +1094,8 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
               ? 'But final (${formatDateFr(finishDate)})'
               : 'Final goal (${formatDateFr(finishDate)})'),
       'subtitle': isFr
-          ? 'Fin de ${endSurah.nameTranslit} • Page $endPage (100%)'
-          : 'End of ${endSurah.nameTranslit} • Page $endPage (100%)',
+          ? 'Fin de ${endSurah.nameTranslit} • Page $finalTargetPage (100%)'
+          : 'End of ${endSurah.nameTranslit} • Page $finalTargetPage (100%)',
       'isFinal': true,
     });
 
