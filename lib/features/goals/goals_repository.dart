@@ -119,15 +119,18 @@ class GoalsRepository {
     final double totalPages = (resolvedEndPos - resolvedStartPos).abs().clamp(0.1, 604.0);
     final String dbActivity = _mapActivityToDb(goalType ?? activity ?? 'memorisation');
 
+    final double dbStartPos = isReverse ? resolvedEndPos : resolvedStartPos;
+    final double dbEndPos = isReverse ? resolvedStartPos : resolvedEndPos;
+
     final insertedGoal = await _client
         .from('goals')
         .insert({
           'user_id': userId,
           'title': title,
           'activity': dbActivity,
-          'start_pos': resolvedStartPos,
-          'end_pos': resolvedEndPos,
-          'current_pos': resolvedStartPos,
+          'start_pos': dbStartPos,
+          'end_pos': dbEndPos,
+          'current_pos': dbStartPos,
           'start_date': formatDate(startDate),
           'due_date': formatDate(dueDate),
           'initial_quota': totalPages / resolvedDays,
@@ -166,14 +169,19 @@ class GoalsRepository {
               ? (currentPos + pagesPerSession).clamp(resolvedStartPos, resolvedEndPos)
               : (currentPos - pagesPerSession).clamp(resolvedEndPos, resolvedStartPos));
 
+      final double rawFrom = currentPos < nextPos ? currentPos : nextPos;
+      final double rawTo = currentPos < nextPos ? nextPos : currentPos;
+      final double safeFrom = double.parse(rawFrom.toStringAsFixed(2));
+      final double safeTo = double.parse((rawTo <= rawFrom ? rawFrom + 0.1 : rawTo).toStringAsFixed(2));
+
       tasksToInsert.add({
         'user_id': userId,
         'goal_id': goalId,
         'activity': dbActivity,
         'origin': 'plan',
         'task_date': formatDate(studyDates[i]),
-        'pos_from': double.parse(currentPos.toStringAsFixed(2)),
-        'pos_to': double.parse(nextPos.toStringAsFixed(2)),
+        'pos_from': safeFrom,
+        'pos_to': safeTo,
         'status': 'planned',
       });
 

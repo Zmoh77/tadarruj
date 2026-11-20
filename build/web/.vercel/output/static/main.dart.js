@@ -118304,54 +118304,61 @@ avt(a){switch(a){case"memorisation":case"memorization":return"memorisation"
 case"revision":return"revision"
 default:return"lecture"}},
 Ae(a,b,c,d,e,f){return this.aG7(a,b,c,d,e,f)},
-aG7(b0,b1,b2,b3,b4,b5){var s=0,r=A.v(t.H),q=this,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9
-var $async$Ae=A.w(function(b6,b7){if(b6===1)return A.r(b7,r)
-for(;;)switch(s){case 0:a7=q.a
-a8=a7.gcQ().e.a
-a8=a8==null?null:a8.r
-p=a8==null?null:a8.a
+aG7(b6,b7,b8,b9,c0,c1){var s=0,r=A.v(t.H),q=this,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,b0,b1,b2,b3,b4,b5
+var $async$Ae=A.w(function(c2,c3){if(c2===1)return A.r(c3,r)
+for(;;)switch(s){case 0:b3=q.a
+b4=b3.gcQ().e.a
+b4=b4==null?null:b4.r
+p=b4==null?null:b4.a
 if(p==null)throw A.f(A.dz("NOT_AUTHENTICATED"))
 o=new A.b3(Date.now(),0,!1)
 n=A.bR(A.aL(o),A.aP(o),A.bx(o),0,0,0,0)
-m=B.f.aA(B.f.d6(b3.fW(n).a,864e8),1,3650)
-a8=b5.length
-l=a8!==0?A.i6(b5,A.W(b5).c):A.ci([1,2,3,4,5,6,7],t.S)
+m=B.f.aA(B.f.d6(b9.fW(n).a,864e8),1,3650)
+b4=c1.length
+l=b4!==0?A.i6(c1,A.W(c1).c):A.ci([1,2,3,4,5,6,7],t.S)
 k=new A.an5()
-j=b1<b2
-i=B.e.aA(Math.abs(b1-b2),0.1,604)
-h=q.avt(b0)
-a8=a7.e8("goals")
-g=k.$1(n)
-f=k.$1(b3)
-if(m<=30)e="court"
-else e=m<=180?"moyen":"long"
-d=t.N
-c=t.K
-a9=A
+j=b7<b8
+i=B.e.aA(Math.abs(b7-b8),0.1,604)
+h=q.avt(b6)
+g=j?b7:b8
+f=j?b8:b7
+b4=b3.e8("goals")
+e=k.$1(n)
+d=k.$1(b9)
+if(m<=30)c="court"
+else c=m<=180?"moyen":"long"
+b=t.N
+a=t.K
+b5=A
 s=2
-return A.n(a8.kI(0,A.a_(["user_id",p,"title",b4,"activity",h,"start_pos",b2,"end_pos",b1,"current_pos",b2,"start_date",g,"due_date",f,"initial_quota",i/m,"horizon",e,"status","active"],d,c)).jC().D3(0),$async$Ae)
-case 2:b=a9.b5(b7.i(0,"id"))
-a=A.b([],t.If)
-a0=A.bR(A.aL(b3),A.aP(b3),A.bx(b3),0,0,0,0)
-a8=a0.a
-g=a0.b
-a1=n
-for(;;){f=a1.a
-if(f<=a8)f=f===a8&&a1.b>g
-else f=!0
-if(!!f)break
-if(l.m(0,A.jB(a1)))a.push(a1)
-a1=a1.fa(864e8)}if(a.length===0)a.push(n)
-a2=i/a.length
-a3=[]
-for(a8=!j,a4=b2,a5=0;g=a.length,a5<g;++a5,a4=a6){if(a8&&a4>=b1)break
-if(j&&a4<=b1)break
-if(a5===g-1)a6=b1
-else a6=a8?B.e.aA(a4+a2,b2,b1):B.e.aA(a4-a2,b1,b2)
-a3.push(A.a_(["user_id",p,"goal_id",b,"activity",h,"origin","plan","task_date",k.$1(a[a5]),"pos_from",A.aYF(B.e.ao(a4,2)),"pos_to",A.aYF(B.e.ao(a6,2)),"status","planned"],d,c))}s=a3.length!==0?3:4
+return A.n(b4.kI(0,A.a_(["user_id",p,"title",c0,"activity",h,"start_pos",g,"end_pos",f,"current_pos",g,"start_date",e,"due_date",d,"initial_quota",i/m,"horizon",c,"status","active"],b,a)).jC().D3(0),$async$Ae)
+case 2:a0=b5.b5(c3.i(0,"id"))
+a1=A.b([],t.If)
+a2=A.bR(A.aL(b9),A.aP(b9),A.bx(b9),0,0,0,0)
+b4=a2.a
+e=a2.b
+a3=n
+for(;;){d=a3.a
+if(d<=b4)d=d===b4&&a3.b>e
+else d=!0
+if(!!d)break
+if(l.m(0,A.jB(a3)))a1.push(a3)
+a3=a3.fa(864e8)}if(a1.length===0)a1.push(n)
+a4=i/a1.length
+a5=[]
+for(b4=!j,a6=b8,a7=0;e=a1.length,a7<e;++a7,a6=a8){if(b4&&a6>=b7)break
+if(j&&a6<=b7)break
+if(a7===e-1)a8=b7
+else a8=b4?B.e.aA(a6+a4,b8,b7):B.e.aA(a6-a4,b7,b8)
+e=a6<a8
+a9=e?a6:a8
+b0=e?a8:a6
+b1=A.aYF(B.e.ao(a9,2))
+b2=A.aYF(B.e.ao(b0<=a9?a9+0.1:b0,2))
+a5.push(A.a_(["user_id",p,"goal_id",a0,"activity",h,"origin","plan","task_date",k.$1(a1[a7]),"pos_from",b1,"pos_to",b2,"status","planned"],b,a))}s=a5.length!==0?3:4
 break
 case 3:s=5
-return A.n(a7.e8("tasks").kI(0,a3),$async$Ae)
+return A.n(b3.e8("tasks").kI(0,a5),$async$Ae)
 case 5:case 4:return A.t(null,r)}})
 return A.u($async$Ae,r)},
 JA(a,b,c){return this.aOA(a,b,c)},
