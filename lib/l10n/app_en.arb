@@ -1,0 +1,130 @@
+{
+  "@@locale": "en",
+  "appTitle": "TADARRUJ",
+  "navToday": "Today",
+  "navGoals": "Goals",
+  "navCalendar": "Calendar",
+  "navProgress": "Progress",
+  "navQuran": "My Quran",
+  "settingsTitle": "Settings",
+  "placeholderMessage": "Screen ready for the next step.",
+  "connectedStatus": "Connected to Supabase",
+  "errorMissingKeys": "Missing configuration: Supabase keys not provided.",
+  "errorGeneric": "An unexpected error occurred. Please try again.",
+  "onboardingTitle1": "Progress at your own pace",
+  "onboardingDesc1": "TADARRUJ organizes your Quran reading, memorization, and spaced reviews step by step, peacefully and without guilt.",
+  "onboardingTitle2": "Choose your language",
+  "onboardingDesc2": "You can change this setting at any time in the application settings.",
+  "onboardingTitle3": "Ready to begin?",
+  "onboardingDesc3": "Create your personal space to save your progress and access your daily schedule.",
+  "nextButton": "Next",
+  "startButton": "Get started",
+  "authLoginTitle": "Sign in",
+  "authSignupTitle": "Create an account",
+  "authResetTitle": "Reset password",
+  "nameLabel": "First name or display name",
+  "emailLabel": "Email address",
+  "passwordLabel": "Password",
+  "loginButton": "Sign in",
+  "signupButton": "Create account",
+  "sendResetButton": "Send reset link",
+  "forgotPasswordLink": "Forgot password?",
+  "noAccountLink": "No account yet? Sign up",
+  "hasAccountLink": "Already have an account? Sign in",
+  "backToLoginLink": "Back to sign in",
+  "resetEmailSent": "If an account exists for this address, a password reset email has been sent.",
+  "signupSuccessCheckEmail": "Account created! Check your inbox if confirmation is required, or sign in.",
+  "logoutButton": "Sign out",
+  "errInvalidCredentials": "Incorrect email address or password.",
+  "errEmailAlreadyUsed": "This email address is already registered.",
+  "errWeakPassword": "Password must be at least 6 characters long.",
+  "errInvalidEmail": "Please enter a valid email address.",
+  "errNetwork": "Unable to reach the server. Please check your internet connection.",
+  "errEmptyFields": "Please fill in all required fields.",
+  "newGoalButton": "New goal",
+  "createGoalTitle": "Create a goal",
+  "goalTypeLabel": "Goal type",
+  "goalTypeReading": "Reading",
+  "goalTypeMemorization": "Memorization",
+  "goalTypeRevision": "Revision",
+  "goalTitleLabel": "Goal title",
+  "goalTitleHint": "E.g., Complete Quran reading",
+  "startPageLabel": "Start page (1 to 604)",
+  "endPageLabel": "End page (1 to 604)",
+  "durationDaysLabel": "Desired duration (in days)",
+  "saveGoalButton": "Generate my schedule",
+  "noGoalsYet": "No active goals yet.",
+  "noGoalsDesc": "Tap \"New goal\" to plan your journey step by step.",
+  "pagesCountSummary": "{count} pages total • approx. {perDay} page(s) per day",
+  "@pagesCountSummary": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "perDay": { "type": "String" }
+    }
+  },
+  "goalProgressText": "Pages {start} to {end} • {days} days",
+  "@goalProgressText": {
+    "placeholders": {
+      "start": { "type": "int" },
+      "end": { "type": "int" },
+      "days": { "type": "int" }
+    }
+  },
+  "errInvalidPages": "Please enter valid pages between 1 and 604 (start ≤ end).",
+  "errInvalidDuration": "Duration must be at least 1 day.",
+  "todayGreeting": "Today's schedule",
+  "noTasksTodayTitle": "No sessions scheduled for today",
+  "noTasksTodayDesc": "Create a goal in the \"Goals\" tab to generate your daily schedule.",
+  "markDoneButton": "Complete session",
+  "completedBadge": "Completed",
+  "todayPagesRange": "Page {start} to {end}",
+  "@todayPagesRange": {
+    "placeholders": {
+      "start": { "type": "int" },
+      "end": { "type": "int" }
+    }
+  },
+  "allDoneTodayMessage": "Masha'Allah! All of today's sessions are completed.",
+  "calendarSessionsForDay": "Sessions scheduled for this day",
+  "calendarNoSessionForDay": "No sessions scheduled for this date.",
+  "plannedBadge": "Planned",
+  "todayShortcutButton": "Today",
+  "progressOverviewTitle": "Overview",
+  "progressPagesCompleted": "Pages completed",
+  "progressSessionsCompleted": "Sessions completed",
+  "progressGoalsSectionTitle": "Progress by goal",
+  "progressNoDataYet": "No progress data yet.",
+  "progressNoDataDesc": "Complete your first session in the \"Today\" tab to see your statistics grow.",
+  "progressGoalDetail": "{done} / {total} pages ({percent}%)",
+  "@progressGoalDetail": {
+    "placeholders": {
+      "done": { "type": "int" },
+      "total": { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
+  "quranSearchHint": "Search a surah or number...",
+  "quranGoToPageHint": "Page (1-604)",
+  "quranOpenButton": "Open",
+  "quranPageLabel": "Page {page} / 604",
+  "@quranPageLabel": {
+    "placeholders": {
+      "page": { "type": "int" }
+    }
+  },
+  "quranPrevPage": "Previous page",
+  "quranNextPage": "Next page",
+  "settingsAccountSection": "Account",
+  "settingsLanguageSection": "Application language",
+  "settingsAboutSection": "About",
+  "settingsVersionLabel": "Version 1.0.0 • Peaceful Quran companion",
+ "reviewNeedsConsolidationButton": "Consolidate",
+  "reviewFluentButton": "Fluent",
+  "reviewScheduledFeedback": "Spaced review scheduled in {days} day(s).",
+  "@reviewScheduledFeedback": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "errFreeLimitReached": "Free plan limit reached: archive or delete an active goal to create a new one."
+}
