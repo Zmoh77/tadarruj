@@ -66,6 +66,28 @@ class TadarrujAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: TextButton.icon(
+            style: TextButton.styleFrom(
+              foregroundColor: TadarrujColors.goldSoft,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () => GoRouter.of(context).push('/settings/premium'),
+            icon: const Icon(Icons.workspace_premium_rounded, size: 17, color: TadarrujColors.goldSoft),
+            label: const Text(
+              'Tadarruj+',
+              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+            ),
+          ),
+        ),
+        IconButton(
+          tooltip: 'Réglages',
+          icon: const Icon(Icons.settings_outlined, color: Colors.white, size: 20),
+          onPressed: () => GoRouter.of(context).push('/settings'),
+        ),
         if (actions != null) ...actions!,
         if (extraActions != null) ...extraActions!,
         DropdownButtonHideUnderline(
