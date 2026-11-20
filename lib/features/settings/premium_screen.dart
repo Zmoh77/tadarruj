@@ -1523,8 +1523,8 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
               const SizedBox(height: 8),
               Text(
                 isFr
-                    ? 'Une partie de chaque abonnement Tadarruj+ alimente le fonds solidaire. Vous pouvez également parrainer directement un étudiant (7,99 €/mois ou 69,99 €/an) pour lui offrir l’accès complet aux Halaqas et au suivi.'
-                    : 'A portion of every Tadarruj+ subscription supports our solidarity fund. You can also directly sponsor a student (€7.99/mo or €69.99/yr) for full Halaqa and tracking access.',
+                    ? 'Une partie de chaque abonnement Tadarruj+ alimente le fonds solidaire. Si vous parrainez (7,99 €/mois ou 69,99 €/an), un accès complet Tadarruj+ sera offert soit à un élève de votre choix, soit à un autre étudiant dans le besoin.'
+                    : 'A portion of every Tadarruj+ subscription supports our solidarity fund. If you sponsor (€7.99/mo or €69.99/yr), full Tadarruj+ access will be gifted either to a student of your choice or to another student in need.',
                 style: const TextStyle(fontSize: 12.5, height: 1.4),
               ),
               const SizedBox(height: 12),
